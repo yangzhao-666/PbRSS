@@ -13,10 +13,7 @@ from external_actions import get_astar_action
 import warnings
 warnings.simplefilter("ignore", UserWarning)
 
-def test_the_agent(agent, data_path, USE_CUDA, eval_num, args=None, display=False, deter=False, Variable=None, solutions=None):
-    assert solutions, 'plz input solutions during the evaluation.'
-    #every test will test all sub-cases that the agent was training on;
-
+def test_the_agent(agent, data_path, USE_CUDA, eval_num, args=None, display=False, deter=False, Variable=None):
     solved = []
     rewards = []
     
@@ -82,20 +79,5 @@ def test_the_agent(agent, data_path, USE_CUDA, eval_num, args=None, display=Fals
             unsolved_maps.append(env.selected_map)
         
         rewards.append(episode_reward)
-    #calculate solved and unsolved solution length
-    solved_l = 0
-    unsolved_l = 0
-    for m in solved_maps:
-        solved_l += solutions[m[:10]]
-    for m in unsolved_maps:
-        unsolved_l += solutions[m[:10]]
-    if len(solved_maps) == 0:
-        avg_solved_l = 0
-    else:
-        avg_solved_l = solved_l / len(solved_maps)
-    if len(unsolved_maps) == 0:
-        avg_unsolved_l = 0
-    else:
-        avg_unsolved_l = unsolved_l / len(unsolved_maps)
 
-    return np.sum(solved)/eval_num, np.sum(rewards)/eval_num, avg_solved_l, avg_unsolved_l, len(solved_maps), len(unsolved_maps)
+    return np.sum(solved)/eval_num

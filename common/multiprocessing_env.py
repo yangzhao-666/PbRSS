@@ -11,7 +11,6 @@ import numpy as np
 from multiprocessing import Process, Pipe
 import gym
 import gym_sokoban
-from common.input_changes_utils import get_features
 from experts.utils import get_distance
 from external_actions import get_astar_action
 

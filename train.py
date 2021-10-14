@@ -21,8 +21,6 @@ import pickle
 import time
 
 from utilities.channelConverter import hwc2chw
-from utilities.printer import Printer
-from utilities.logger import Logger
 from common.ActorCritic import ActorCritic
 from common.RolloutStorage import RolloutStorage
 from common.cpu_or_gpu import cpu_or_gpu
@@ -52,8 +50,8 @@ def train(args, wandb_session):
     #number of action was 9, but the number of pushing action space is much smaller than moving space, so here we will try pushing action space which is 4+1=5
     #num_actions = envs.action_space.n
     num_actions = 5
-    actor_critic = ActorCritic(state_shape, num_actions=num_actions, normalization=args.normalization)
-    expert_actor_critic = ActorCritic(state_shape, num_actions=num_actions, normalization=args.normalization) #model for loading the pre-trained model to give q-values
+    actor_critic = ActorCritic(state_shape, num_actions=num_actions)
+    expert_actor_critic = ActorCritic(state_shape, num_actions=num_actions) #model for loading the pre-trained model to give q-values
     rollout = RolloutStorage(args.rolloutStorage_size, args.num_envs, state_shape)
     optimizer = optim.RMSprop(actor_critic.parameters(), lr=args.lr, eps=args.eps, alpha=args.alpha)
 
@@ -66,6 +64,6 @@ def train(args, wandb_session):
         train_the_agent(envs, args.num_envs, Variable, state_shape, actor_critic, optimizer, rollout, args, wandb_session) #train and save the model;
     else:
         #initialize the expert
-        expert = Expert(mode=args.mode, pre_trained_path=args.pre_trained_path, expert_model=expert_actor_critic, normalization=args.normalization)
+        expert = Expert(mode=args.mode, pre_trained_path=args.pre_trained_path, expert_model=expert_actor_critic)
         from common.train_the_agent import train_the_agent
         train_the_agent(expert, envs, args.num_envs, Variable, state_shape, actor_critic, optimizer, rollout, args, wandb_session) #train and save the model;

@@ -52,5 +52,4 @@ class ActorCritic(OnPolicy):
         value = self.critic(x)
         if self.normalization:
             value = value/torch.sum(value)
-        print('sum value: {}'.format(torch.sum(value)))
         return value
